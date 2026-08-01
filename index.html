@@ -2,48 +2,308 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>EKEN Camera</title>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>MEDIA FULL Camera Viewer</title>
 
 <style>
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-    background:#111;
-    color:white;
-    font-family:Arial,Helvetica,sans-serif;
-    text-align:center;
+
+background:#101010;
+
+color:#ffffff;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+min-height:100vh;
+
+padding:15px;
+
+}
+
+.container{
+
+width:100%;
+
+max-width:900px;
+
+background:#1d1d1d;
+
+border-radius:18px;
+
+overflow:hidden;
+
+box-shadow:0 0 25px rgba(0,0,0,.7);
+
+border:2px solid #3a3a3a;
+
 }
 
 header{
-    background:#222;
-    padding:15px;
-    font-size:28px;
-    font-weight:bold;
+
+background:#E65100;
+
+padding:15px 20px;
+
+text-align:center;
+
 }
 
-#container{
-    padding:20px;
+.title{
+
+font-size:24px;
+
+font-weight:bold;
+
+letter-spacing:.5px;
+
+text-align:center;
+
 }
 
-img{
-    width:100%;
-    max-width:650px;
-    border-radius:10px;
-    border:2px solid #444;
+.live{
+
+background:#00C853;
+
+padding:8px 16px;
+
+border-radius:30px;
+
+font-weight:bold;
+
+font-size:15px;
+
+box-shadow:0 0 10px #00C853;
+
 }
 
-#time{
-    margin-top:15px;
-    color:#bbb;
-    font-size:18px;
+main{
+
+padding:18px;
+
+background:#202020;
+
+}
+
+.cameraFrame{
+
+background:#000;
+
+border-radius:14px;
+
+overflow:hidden;
+
+border:6px solid #B85C00;
+
+box-shadow:0 0 18px rgba(0,0,0,.6);
+
+position:relative;
+
+}
+
+#camera{
+
+display:block;
+
+width:100%;
+
+background:#000;
+
+user-select:none;
+
+}
+
+.overlay{
+
+position:absolute;
+
+left:0;
+
+top:0;
+
+width:100%;
+
+height:100%;
+
+pointer-events:none;
+
+}
+
+#liveStatus{
+
+position:absolute;
+
+top:12px;
+
+left:12px;
+
+}
+
+#clockBox{
+
+position:absolute;
+
+top:12px;
+
+right:12px;
+
+}
+
+#cloudBox{
+
+position:absolute;
+
+bottom:12px;
+
+left:12px;
+
+}
+
+#fpsBox{
+
+position:absolute;
+
+bottom:12px;
+
+right:12px;
+
+}
+
+
+.badge{
+
+background:rgba(0,0,0,.55);
+
+padding:6px 12px;
+
+border-radius:20px;
+
+font-size:14px;
+
+font-weight:bold;
+
+}
+
+.statusPanel{
+
+background:#322519;
+
+padding:18px;
+
+}
+
+.row{
+
+display:flex;
+
+justify-content:space-between;
+
+padding:10px 0;
+
+border-bottom:1px solid #444;
+
+font-size:17px;
+
+}
+
+.row:last-child{
+
+border-bottom:none;
+
+}
+
+footer{
+
+display:flex;
+
+gap:12px;
+
+padding:18px;
+
+background:#1b1b1b;
+
+}
+
+footer button{
+
+flex:1;
+
+background:#F57C00;
+
+border:none;
+
+color:#fff;
+
+padding:16px;
+
+font-size:16px;
+
+font-weight:bold;
+
+border-radius:12px;
+
+cursor:pointer;
+
+transition:.25s;
+
+}
+
+footer button:hover{
+
+background:#FB8C00;
+
+}
+
+footer button:active{
+
+transform:scale(.96);
+
+}
+
+@media(max-width:700px){
+
+.title{
+
+font-size:18px;
+
+}
+
+.live{
+
+font-size:13px;
+
+padding:6px 10px;
+
+}
+
+.row{
+
+font-size:15px;
+
+}
+
+footer{
+
+flex-direction:column;
+
+}
+
 }
 
 </style>
@@ -52,44 +312,280 @@ img{
 
 <body>
 
+<div class="container">
+
 <header>
-📷 EKEN CAMERA LIVE
+
+<div class="title">
+
+📷 MEDIA FULL Camera Viewer
+
+</div>
+
 </header>
 
-<div id="container">
+<main>
 
-<img id="camera"
-     src="http://192.168.1.118:8080/live.jpg">
+<div class="cameraFrame">
 
-<div id="time">
-Connecting...
+<div class="overlay">
+
+<div class="badge" id="liveStatus">
+
+🟢 LIVE
+
 </div>
+
+<div class="badge" id="clockBox">
+
+🕒 00:00:00
+
+</div>
+
+<div class="badge" id="cloudBox">
+
+☁ CLOUD
+
+</div>
+
+<div class="badge" id="fpsBox">
+
+⚡ 1 FPS
+
+</div>
+
+</div>
+
+<img id="camera">
+
+</div>
+
+</main>
+
+<section class="statusPanel">
+
+<div class="row">
+
+<span>☁ Cloud</span>
+
+<span id="cloudStatus">
+
+Connected
+
+</span>
+
+</div>
+
+<div class="row">
+
+<span>📶 Signal</span>
+
+<span>
+
+Excellent
+
+</span>
+
+</div>
+
+<div class="row">
+
+<span>🖥 Resolution</span>
+
+<span id="resolution">
+
+Auto
+
+</span>
+
+</div>
+
+<div class="row">
+
+<span>📡 Refresh</span>
+
+<span id="refreshRate">
+
+500 ms
+
+</span>
+
+</div>
+
+</section>
+
+<footer>
+
+<button id="btnSnapshot">
+
+📸 Snapshot
+
+</button>
+
+<button id="btnRefresh">
+
+🔄 Refresh
+
+</button>
+
+<button id="btnFullscreen">
+
+⛶ Full Screen
+
+</button>
+
+</footer>
 
 </div>
 
 <script>
 
-const img = document.getElementById("camera");
-const time = document.getElementById("time");
+const CAMERA_URL =
+"https://samuel-essentially-thoughts-felt.trycloudflare.com/live.jpg";
 
-function refresh() {
+const camera=document.getElementById("camera");
 
-    img.onload = function () {
-        setTimeout(refresh, 66);
-    };
+const fpsBox=document.getElementById("fpsBox");
 
-    img.onerror = function () {
-        setTimeout(refresh, 500);
-    };
+const clockBox=document.getElementById("clockBox");
 
-    img.src = "http://192.168.1.118:8080/live.jpg?t=" + Date.now();
+const cloudStatus=document.getElementById("cloudStatus");
 
-    time.innerHTML = new Date().toLocaleTimeString();
+const liveStatus=document.getElementById("liveStatus");
+
+const btnRefresh=document.getElementById("btnRefresh");
+
+const btnFullscreen=document.getElementById("btnFullscreen");
+
+const btnSnapshot=document.getElementById("btnSnapshot");
+
+let fps=1;
+
+let refreshInterval= 500;
+
+let lastFrame=performance.now();
+
+function updateClock(){
+
+const now=new Date();
+
+clockBox.innerHTML=now.toLocaleTimeString();
+
 }
 
-refresh();
+setInterval(updateClock,1000);
 
-setInterval(refresh,66);
+function refreshCamera(){
+
+camera.src=
+
+CAMERA_URL+
+
+"?t="+
+
+Date.now();
+
+}
+
+btnFullscreen.onclick=function(){
+
+if(camera.requestFullscreen){
+
+camera.requestFullscreen();
+
+}
+
+};
+
+btnSnapshot.onclick=function(){
+
+const link=document.createElement("a");
+
+link.href=camera.src;
+
+link.download="Snapshot_"+Date.now()+".jpg";
+
+link.click();
+
+};
+
+document.addEventListener("visibilitychange",function(){
+
+if(document.hidden){
+
+cloudStatus.innerHTML="Paused";
+
+}
+
+else{
+
+cloudStatus.innerHTML="Connected";
+
+refreshCamera();
+
+}
+
+});
+
+window.addEventListener("online",function(){
+
+cloudStatus.innerHTML="Connected";
+
+liveStatus.innerHTML="● LIVE";
+
+liveStatus.style.background="#00C853";
+
+refreshCamera();
+
+});
+
+window.addEventListener("offline",function(){
+
+cloudStatus.innerHTML="Offline";
+
+liveStatus.innerHTML="● OFFLINE";
+
+liveStatus.style.background="#D50000";
+
+});
+
+camera.onload=function(){
+
+const now=performance.now();
+
+fps=1000/(now-lastFrame);
+
+lastFrame=now;
+
+fpsBox.innerHTML="⚡ "+fps.toFixed(1)+" FPS";
+
+cloudStatus.innerHTML="Connected";
+
+liveStatus.innerHTML="● LIVE";
+
+liveStatus.style.background="#00C853";
+
+};
+
+camera.onerror=function(){
+
+cloudStatus.innerHTML="Disconnected";
+
+liveStatus.innerHTML="● OFFLINE";
+
+liveStatus.style.background="#D50000";
+
+setTimeout(refreshCamera,2000);
+
+};
+
+refreshCamera();
+
+setInterval(function(){
+
+refreshCamera();
+
+},refreshInterval);
 
 </script>
 
