@@ -589,6 +589,16 @@ link.click();
 
 };
 
+btnRefresh.onclick = function(){
+
+    selectBestSource().then(function(){
+
+        refreshCamera();
+
+    });
+
+};
+
 document.addEventListener("visibilitychange",function(){
 
 if(document.hidden){
