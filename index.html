@@ -456,6 +456,8 @@ const clockBox=document.getElementById("clockBox");
 
 const cloudStatus=document.getElementById("cloudStatus");
 
+const refreshRate=document.getElementById("refreshRate");
+
 const liveStatus=document.getElementById("liveStatus");
 
 const btnRefresh=document.getElementById("btnRefresh");
@@ -498,6 +500,8 @@ async function selectBestSource()
 
 	    refreshInterval = 500;
 
+            refreshRate.innerHTML = refreshInterval + " ms";
+
             cloudBox.innerHTML = "☁ CLOUD";
 
             cloudStatus.innerHTML = "Cloud";
@@ -517,6 +521,8 @@ async function selectBestSource()
             CAMERA_URL = LOCAL_URL;
 	    
 	    refreshInterval = 100;
+
+            refreshRate.innerHTML = refreshInterval + " ms";
 
             cloudBox.innerHTML = "🏠 LOCAL";
 
