@@ -440,8 +440,13 @@ Auto
 
 <script>
 
-const CAMERA_URL =
+const LOCAL_URL =
+"http://192.168.1.118:8080/live.jpg";
+
+const CLOUD_URL =
 "https://lambda-assurance-receipt-treatment.trycloudflare.com/live.jpg";
+
+let CAMERA_URL = CLOUD_URL;
 
 const camera=document.getElementById("camera");
 
@@ -475,7 +480,82 @@ clockBox.innerHTML=now.toLocaleTimeString();
 
 setInterval(updateClock,1000);
 
+async function selectBestSource()
+{
+    return new Promise((resolve)=>{
+
+        const img = new Image();
+
+        let finished = false;
+
+        const timeout = setTimeout(()=>{
+
+            if(finished) return;
+
+            finished = true;
+
+            CAMERA_URL = CLOUD_URL;
+
+	    refreshInterval = 500;
+
+            cloudBox.innerHTML = "☁ CLOUD";
+
+            cloudStatus.innerHTML = "Cloud";
+
+            resolve();
+
+        },400);
+
+        img.onload = function(){
+
+            if(finished) return;
+
+            finished = true;
+
+            clearTimeout(timeout);
+
+            CAMERA_URL = LOCAL_URL;
+	    
+	    refreshInterval = 100;
+
+            cloudBox.innerHTML = "🏠 LOCAL";
+
+            cloudStatus.innerHTML = "Local";
+
+            resolve();
+
+        };
+
+        img.onerror = function(){
+
+            if(finished) return;
+
+            finished = true;
+
+            clearTimeout(timeout);
+
+            CAMERA_URL = CLOUD_URL;
+
+            cloudBox.innerHTML = "☁ CLOUD";
+
+            cloudStatus.innerHTML = "Cloud";
+
+            resolve();
+
+        };
+
+        img.src =
+            LOCAL_URL +
+            "?t=" +
+            Date.now();
+
+    });
+
+}
+
 function refreshCamera(){
+
+console.log(CAMERA_URL);
 
 camera.src=
 
@@ -516,26 +596,27 @@ if(document.hidden){
 cloudStatus.innerHTML="Paused";
 
 }
-
 else{
 
-cloudStatus.innerHTML="Connected";
+selectBestSource().then(function(){
 
-refreshCamera();
+    refreshCamera();
 
+});
 }
-
 });
 
 window.addEventListener("online",function(){
-
-cloudStatus.innerHTML="Connected";
 
 liveStatus.innerHTML="● LIVE";
 
 liveStatus.style.background="#00C853";
 
-refreshCamera();
+selectBestSource().then(function(){
+
+    refreshCamera();
+
+});
 
 });
 
@@ -579,13 +660,18 @@ setTimeout(refreshCamera,2000);
 
 };
 
-refreshCamera();
+function refreshLoop()
+{
+    refreshCamera();
 
-setInterval(function(){
+    setTimeout(refreshLoop, refreshInterval);
+}
 
-refreshCamera();
+selectBestSource().then(function(){
 
-},refreshInterval);
+    refreshLoop();
+
+});
 
 </script>
 
